@@ -32,6 +32,6 @@
       <value>10000</value>
     </property>
     <property name="force" value="true" />
-    <property name="repository" value="repositoryHelper"/>
+    <property name="repository" ref="repositoryHelper"/>
   </bean>
 </beans>
