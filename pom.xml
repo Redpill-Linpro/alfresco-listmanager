@@ -39,8 +39,8 @@
 
   <scm>
     <url>https://github.com/acando/alfresco-listmanager</url>
-    <connection>scm:git:git://github.com/acando/alfresco-listmanager.git</connection>
-    <developerConnection>scm:git:git@github.com:acando/alfresco-listmanager.git</developerConnection>
+    <connection>scm:git:git://github.com/Redpill-Linpro/alfresco-listmanager.git</connection>
+    <developerConnection>scm:git:git@github.com:Redpill-Linpro/alfresco-listmanager.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
