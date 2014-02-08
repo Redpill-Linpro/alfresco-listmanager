@@ -67,9 +67,9 @@ or, otherwise drop the jar-file in to ```tomcat/shared/classes``` of your instal
 ### Downloadable binaries
 
 The latest version binaries can also be downloaded for manual installation as stated above.
-Download [the amp file](https://s3-eu-west-1.amazonaws.com/alfresco-listmanager-dist/listmanager-amp-1.4.1.amp)
+Download [the amp file](https://s3-eu-west-1.amazonaws.com/alfresco-listmanager-dist/listmanager-amp-1.3.amp)
 and 
-[the jar file](https://s3-eu-west-1.amazonaws.com/alfresco-listmanager-dist/listmanager-jar-1.4.1.jar) 
+[the jar file](https://s3-eu-west-1.amazonaws.com/alfresco-listmanager-dist/listmanager-jar-1.3.jar) 
 
 
 ### Usage
