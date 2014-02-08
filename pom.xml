@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.acando.alfresco</groupId>
   <artifactId>listmanager</artifactId>
-  <version>1.4.1</version>
+  <version>1.4.2-SNAPSHOT</version>
   <name>Alfresco Listmanager Parent POM</name>
   <packaging>pom</packaging>
 
@@ -41,7 +41,7 @@
     <url>https://github.com/acando/alfresco-listmanager</url>
     <connection>scm:git:git://github.com/Redpill-Linpro/alfresco-listmanager.git</connection>
     <developerConnection>scm:git:git@github.com:Redpill-Linpro/alfresco-listmanager.git</developerConnection>
-    <tag>listmanager-1.4.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
