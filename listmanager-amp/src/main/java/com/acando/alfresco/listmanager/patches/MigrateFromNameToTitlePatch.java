@@ -21,12 +21,11 @@ public class MigrateFromNameToTitlePatch extends AbstractPatch {
   private static Log log = LogFactory.getLog(MigrateFromNameToTitlePatch.class);
 
   private Repository repository;
-  
-  public void setRepository(Repository repository)
-  {
-      this.repository = repository;
+
+  public void setRepository(Repository repository) {
+    this.repository = repository;
   }
-  
+
   String XPATH = "/app:company_home/app:dictionary/cm:Lists/*";
 
   @Override
@@ -58,6 +57,5 @@ public class MigrateFromNameToTitlePatch extends AbstractPatch {
     }
 
   }
-
 
 }
