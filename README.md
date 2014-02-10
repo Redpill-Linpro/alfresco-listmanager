@@ -41,7 +41,7 @@ For Share:
 		<dependency>
 		    <groupId>com.acando.alfresco</groupId>
 		    <artifactId>listmanager-jar</artifactId>
-		    <version>1.5.1</version>
+		    <version>1.5.2</version>
 		    <scope>runtime</scope>
 		</dependency>
 ```
@@ -50,7 +50,7 @@ For the Repository:
  		<dependency>
  		    <groupId>com.acando.alfresco</groupId>
  		    <artifactId>listmanager-amp</artifactId>
- 		    <version>1.5.1</version>
+ 		    <version>1.5.2</version>
  		    <type>amp</type>
  		</dependency>
 ```
@@ -63,14 +63,6 @@ Don't forget to add it as an overlay in the maven-war-plugin configuration as we
         </overlay>...
 ```
 or, otherwise drop the jar-file in to ```tomcat/shared/classes``` of your installation and install the amp with the mmt-tool.
-
-### Downloadable binaries
-
-The latest version binaries can also be downloaded for manual installation as stated above.
-Download [the amp file](https://s3-eu-west-1.amazonaws.com/alfresco-listmanager-dist/listmanager-amp-1.5.1.amp)
-and 
-[the jar file](https://s3-eu-west-1.amazonaws.com/alfresco-listmanager-dist/listmanager-jar-1.5.1.jar) 
-
 
 ### Usage
 
@@ -93,8 +85,8 @@ Where "changeRequest_status" is the name of a list containing all change request
 
 
 ### Issue Management
-If you want to report a bug please create a new [issue](https://github.com/acando/alfresco-listmanager/issues)
+If you want to report a bug please create a new [issue](https://github.com/Redpill-Linpro/alfresco-listmanager/issues)
 
 ### Contributions
-Contributions are welcome. Clone the project, implement the change/feature and submit to github [pull request](https://github.com/acando/alfresco-listmanager/pulls).
+Contributions are welcome. Clone the project, implement the change/feature and submit to github [pull request](https://github.com/Redpill-Linpro/alfresco-listmanager/pulls).
 
