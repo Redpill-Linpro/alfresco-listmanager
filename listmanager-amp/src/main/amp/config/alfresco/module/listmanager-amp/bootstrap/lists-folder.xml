@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+   xmlns:d="http://www.alfresco.org/model/dictionary/1.0" xmlns:cm="http://www.alfresco.org/model/content/1.0"
+   xmlns:sys="http://www.alfresco.org/model/system/1.0" xmlns="">
+   <cm:folder view:childName="cm:Lists">
+      <view:properties>
+         <sys:store-protocol>workspace</sys:store-protocol>
+         <sys:store-identifier>SpacesStore</sys:store-identifier>
+         <sys:node-uuid>listmanager_root_space</sys:node-uuid>
+         <cm:name>Lists</cm:name>
+         <cm:title>Lists</cm:title>
+         <cm:description>Base folder for listmanger lists</cm:description>
+      </view:properties>
+   </cm:folder>
+</view:view>
