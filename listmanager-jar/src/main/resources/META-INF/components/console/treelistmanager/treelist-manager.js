@@ -5,6 +5,7 @@ if (typeof Acando == "undefined" || !Acando)
 }
 (function() // Function closure
 {
+	var itemExist = false;
 	var Dom = YAHOO.util.Dom;
 	var Event = YAHOO.util.Event;
 	var DDM = YAHOO.util.DragDropMgr;
@@ -421,71 +422,105 @@ if (typeof Acando == "undefined" || !Acando)
        	 }	 
 
         },
+        
         _editorSaveEvent:function (oArgs) { // newValue , oldValue , node
-        	 if (oArgs.node.data.nodeRef == null) {
-        		 //Handle new item
-					var actionCallback = {
-	                success: function(o) {
-	                	var results = YAHOO.lang.JSON.parse(o.responseText)
-	                	var nodeData =  {
-								label: results.item.label,
-								nodeRef: results.item.nodeRef,
-							    isLeaf : true,
-							    labelStyle: "",
-						        type : "text",
-						        children: [],
-						        editable:true
-						};
-	        			
-	                	//trigger refresh/load
-	                	this.oCurrentTextNode = this.root.clazz.oCurrentTextNode;
-						this.oCurrentTextNode.isLeaf = false;
-	                	this.removeChildren(this.oCurrentTextNode,true);
-	                	this.oCurrentTextNode.expand();
-	                	this.oCurrentTextNode = null;
-	
-	                	
-	                },
-	                failure: function(o) {
-	                    alert("failure:" + o);
-	                },
-	                scope:this
-	             };
-			
-	            var actionUrl = Alfresco.constants.PROXY_URI + "acando/console/sync-treelist-manager/" + this.root.clazz.oCurrentTextNode.data.nodeRef + "/addFolder/?t=" + Alfresco.util.encodeURIPath(oArgs.newValue)  + "&i=" + oArgs.node.data.newOrdinal;
-	             
-	           var transaction = YAHOO.util.Connect.asyncRequest('GET', actionUrl,actionCallback, null);
+        	if (oArgs.node.data.nodeRef == null) {
+        	//Handle new item
+        		var actionCallback = {
+                success: function(o) {
+                	var results = YAHOO.lang.JSON.parse(o.responseText)
+                	var nodeData =  {
+                		label: results.item.label,
+                		nodeRef: results.item.nodeRef,
+                		isLeaf : true,
+                		labelStyle: "",
+                		type : "text",
+                		children: [],
+                		editable:true
+                	};
+        	
+                	//trigger refresh/load
+                	this.oCurrentTextNode = this.root.clazz.oCurrentTextNode;
+                	this.oCurrentTextNode.isLeaf = false;
+                	this.removeChildren(this.oCurrentTextNode,true);
+                	this.oCurrentTextNode.expand();
+                	this.oCurrentTextNode = null;
 
-        	 } else {
-        		 //Handle save name change
-             	
-             	var actionCallback = {
-     	                success: function(o) {
-     						    var attributes = { 
-     								opacity: { from: 0.3, to: 1 } 
-     							}; 
-     							var anim = new YAHOO.util.Anim(this.node.contentElId, attributes); 
-     							
-     							anim.animate();
-     						   
-     	                },
-     	                failure: function(o) {
-     	                    alert("failure:" + o);
-     	                },
-     	                scope:oArgs
-     	             };
-     	
-     	             var actionUrl = Alfresco.constants.PROXY_URI + "acando/console/sync-treelist-manager/" + oArgs.node.parent.data.nodeRef + "/changeName/?n=" + oArgs.node.data.nodeRef  + "&t=" + oArgs.newValue;
-     	             
-     	             var transaction = YAHOO.util.Connect.asyncRequest('GET', actionUrl,actionCallback, null);
-     	             Dom.setStyle(oArgs.node.contentElId, "opacity", 0.30);
-     	             oArgs.node.label = oArgs.newValue;
-     	             //oArgs.node.refresh();
-        	 }
+                	
+                },
+                failure: function(o) {
+                    alert("failure:" + o);
+                },
+                scope:this
+             };
+        		var setOptionsCallback = 
+        		{
+        				success: function(o) 
+        				{
+        					var children = this.root.clazz.oCurrentTextNode.children;
+        					itemExist=false;
+        					var count = 0;
+        					for(i = 0; i < children.length; i++) 
+        					{
+        						var child = children[i];
+        						if(child.label==oArgs.newValue){
+        							count++;
+        							if(count>1){
+        								itemExist = true;
+        								break;
+        							}
+        						}
+        					}
+        					
+        					if(itemExist==false){
+        			            var actionUrl = Alfresco.constants.PROXY_URI + "acando/console/sync-treelist-manager/" + this.root.clazz.oCurrentTextNode.data.nodeRef + "/addFolder/?t=" + Alfresco.util.encodeURIPath(oArgs.newValue)  + "&i=" + oArgs.node.data.newOrdinal;
+        			            var transaction = YAHOO.util.Connect.asyncRequest('GET', actionUrl,actionCallback, null);
+        					} else {
+        						 alert("Item already exists");
+        						 if (oArgs.node.data.nodeRef == null) {
+        				       		 oArgs.node.tree.removeNode(oArgs.node,true);
+        				       	 }
+        					}
+        				},
+        				failure: function(o) 
+        				{
+        					Alfresco.util.PopupManager.displayMessage({text: "Could not load values!"});
+        				},
+        				scope: this
+        		};
+
+        		var listUrl = "#";
+        		var transaction = YAHOO.util.Connect.asyncRequest('GET', listUrl, setOptionsCallback, null);
+        	} else {
+        	//Handle save name change
+             
+             var actionCallback = {
+                     success: function(o) {
+                    	 var attributes = { 
+                    			 opacity: { from: 0.3, to: 1 } 
+                    	 }; 
+                    	 var anim = new YAHOO.util.Anim(this.node.contentElId, attributes); 
+                    	 anim.animate();
+        
+                     },
+                     failure: function(o) {
+                         alert("failure:" + o);
+                     },
+                     scope:oArgs
+                  };
+     
+                  var actionUrl = Alfresco.constants.PROXY_URI + "acando/console/sync-treelist-manager/" + oArgs.node.parent.data.nodeRef + "/changeName/?n=" + oArgs.node.data.nodeRef  + "&t=" + oArgs.newValue;
+                  
+                  var transaction = YAHOO.util.Connect.asyncRequest('GET', actionUrl,actionCallback, null);
+                  Dom.setStyle(oArgs.node.contentElId, "opacity", 0.30);
+                  oArgs.node.label = oArgs.newValue;
+                  //oArgs.node.refresh();
+        	}
 
         },
         
-        /**
+        
+         /**
          * YUI WIDGET EVENT HANDLERS
          * Handlers for standard events fired from YUI widgets, e.g. "click"
          */
