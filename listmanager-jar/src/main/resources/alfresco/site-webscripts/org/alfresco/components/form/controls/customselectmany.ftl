@@ -129,7 +129,8 @@
 
 								option.value = (v.value === null || v.value === "") ? v.label : v.value;
 								option.text = v.label;
-								option.selected = (option.value === selectedValue);
+								option.selected=typeof(selectedValue===Array) ? selectedValue.includes( option.value ) : (option.value===selectedValue);
+								//console.log("selected: "+ option.selected);
 								listbox.add(option);
 							}
 						},
