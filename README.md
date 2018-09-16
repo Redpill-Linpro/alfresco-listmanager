@@ -41,7 +41,7 @@ For Share:
 		<dependency>
 		    <groupId>com.acando.alfresco</groupId>
 		    <artifactId>listmanager-jar</artifactId>
-		    <version>1.5.2</version>
+		    <version>1.5.4</version>
 		    <scope>runtime</scope>
 		</dependency>
 ```
@@ -50,7 +50,7 @@ For the Repository:
  		<dependency>
  		    <groupId>com.acando.alfresco</groupId>
  		    <artifactId>listmanager-amp</artifactId>
- 		    <version>1.5.2</version>
+ 		    <version>1.5.4</version>
  		    <type>amp</type>
  		</dependency>
 ```
