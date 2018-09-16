@@ -29,7 +29,7 @@
       <value>${version.schema}</value>
     </property>
     <property name="targetSchema">
-      <value>10000</value>
+      <value>100000</value>
     </property>
     <property name="force" value="true" />
     <property name="repository" ref="repositoryHelper"/>
@@ -51,7 +51,7 @@
       <value>${version.schema}</value>
     </property>
     <property name="targetSchema">
-      <value>10000</value>
+      <value>100000</value>
     </property>
     <property name="force" value="true" />
 

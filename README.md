@@ -20,8 +20,8 @@ need to restart Alfresco after editing the lists (which is the case when using c
 This extension was created with the [Alfresco Maven SDK](https://arti
 facts.alfresco.com/nexus/content/repositories/alfresco-docs/alfresco-lifecycle-aggregator/latest/index.html) and compiles against Alfresco Community 4.2.c. It has also been tested with:
 
-* Alfresco Community 4.0.e and higher
-* Alfresco Enterprise 4.0.2 and higher
+* Alfresco Community 5.2.e
+* Alfresco Enterprise 5.2.4
 
 ### Building
 
