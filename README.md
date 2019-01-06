@@ -45,6 +45,7 @@ Declare those as dependencies in your artifacts (if you are using the Maven SDK)
 For Share:
 
 if JAR module:
+
 ```
 		<dependency>
 		    <groupId>com.acando.alfresco</groupId>
@@ -53,7 +54,9 @@ if JAR module:
 		    <scope>runtime</scope>
 		</dependency>
 ```
+
 if AMP module:
+
 ```
 		<dependency>
 		    <groupId>com.acando.alfresco</groupId>
@@ -63,8 +66,11 @@ if AMP module:
 			<type>amp</type>
 		</dependency>
 ```
+
 For the Repository:
+
 if JAR module:
+
 ```
  		<dependency>
  		    <groupId>com.acando.alfresco</groupId>
@@ -72,7 +78,9 @@ if JAR module:
  		    <version>1.5.5</version>
  		</dependency>
 ```
+
 if AMP module:
+
 ```
  		<dependency>
  		    <groupId>com.acando.alfresco</groupId>
@@ -85,7 +93,8 @@ Don't forget to add it as an overlay in the maven-war-plugin configuration as we
 
 with old AMP module and old SDK alfresco:
 
-```...
+```
+	...
         <overlay>
             <groupId>com.acando.alfresco</groupId>
 			<artifactId>listmanager-amp-repo</artifactId>
@@ -98,7 +107,8 @@ or, otherwise drop the jar-file in to ```tomcat/shared/classes``` of your instal
 
 with JAR module and the new alfresco SDK 3 plugin maven:
 
-```...
+```
+	...
 	  	  <plugin>
 	          <groupId>org.alfresco.maven.plugin</groupId>
 	          <artifactId>alfresco-maven-plugin</artifactId>
@@ -131,7 +141,8 @@ or, otherwise drop the jar-file in to ```/<ALFRESCO PATH>/modules/platform``` of
 
 with AMP module and the new alfresco SDK 3 plugin maven:
 
-```...
+```
+	...
 	  	  <plugin>
 	          <groupId>org.alfresco.maven.plugin</groupId>
 	          <artifactId>alfresco-maven-plugin</artifactId>
@@ -163,7 +174,8 @@ or, otherwise drop the amp-file in to ```/<ALFRESCO PATH>/modules/platform``` of
 
 with old AMP module and old SDK alfresco:
 
-```...
+```
+	...
         <overlay>
             <groupId>com.acando.alfresco</groupId>
 			<artifactId>listmanager-amp-share</artifactId>
@@ -176,7 +188,8 @@ or, otherwise drop the jar-file in to ```tomcat/shared/classes``` of your instal
 
 with JAR module and the new alfresco SDK 3 plugin maven:
 
-```...
+```
+	...
 	  	  <plugin>
 	          <groupId>org.alfresco.maven.plugin</groupId>
 	          <artifactId>alfresco-maven-plugin</artifactId>
@@ -207,9 +220,11 @@ or, otherwise drop the jar-file in to ```/<ALFRESCO PATH>/modules/share``` of yo
 
 ###### NOTE: This third option is not optimal use the second option or the first.
 
+
 with AMP module and the new alfresco SDK 3 plugin maven:
 
-```...
+```
+	...
 	  	  <plugin>
 	          <groupId>org.alfresco.maven.plugin</groupId>
 	          <artifactId>alfresco-maven-plugin</artifactId>
@@ -246,8 +261,7 @@ When correctly installed a new GUI can be found in the Admin console part of Alf
 
 To make use of the values from one list, use the customselectone.ftl form control supplied like this:
 
-###### NOTE: to avoid collision with other addons the path of the form template is change from the old "/org/alfresco/components/form/controls/customselectone.ftl"
-to the "/service-listmanager/org/alfresco/components/form/controls/customselectone.ftl"
+###### NOTE: to avoid collision with other addons the path of the form template is change from the old "/org/alfresco/components/form/controls/customselectone.ftl" to the "/service-listmanager/org/alfresco/components/form/controls/customselectone.ftl"
 
 ```					
 <field id="ac:changeRequestStatus">
