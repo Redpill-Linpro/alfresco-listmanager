@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to You under the Apache License, Version 2.0 (the "License"); you 
+  may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+  OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. -->
+<beans>
+  <!-- Registration of new models addition -->
+  <bean id="service-listmanager-dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+    <property name="models">
+      <list>
+        <value>alfresco/module/${project.artifactId}/model/service-listmanager-list-manager-data-model.xml</value>
+      </list>
+    </property>
+  </bean>
+  
+  <!-- This patch migrates the listmanager to use the title field instead of the name field. This is far better since there are some annoying restrictions on 
+       what to name an Alfresco node. -->
+  <bean id="service-listmanager-patch-migrateFromNameToTitlePatch" class="com.acando.alfresco.listmanager.patches.MigrateFromNameToTitlePatch" parent="basePatch">
+    <property name="id">
+      <value>patch.patch.migrateFromNameToTitlePatch</value>
+    </property>
+    <property name="description">
+      <value>patch.patch.migrateFromNameToTitlePatch.description</value>
+    </property>
+    <property name="fixesFromSchema">
+      <value>0</value>
+    </property>
+    <property name="fixesToSchema">
+      <value>${version.schema}</value>
+    </property>
+    <property name="targetSchema">
+      <value>100000</value>
+    </property>
+    <property name="force" value="true" />
+    <property name="repository" ref="repositoryHelper"/>
+  </bean>
+  
+  
+
+  <bean id="service-listmanager-patch.listsFolder" class="org.alfresco.repo.admin.patch.impl.GenericBootstrapPatch" parent="basePatch">
+    <property name="id">
+      <value>patch.listsFolder</value>
+    </property>
+    <property name="description">
+      <value>patch.listsFolder.description</value>
+    </property>
+    <property name="fixesFromSchema">
+      <value>0</value>
+    </property>
+    <property name="fixesToSchema">
+      <value>${version.schema}</value>
+    </property>
+    <property name="targetSchema">
+      <value>100000</value>
+    </property>
+    <property name="force" value="true" />
+
+    <property name="importerBootstrap">
+      <ref bean="spacesBootstrap" />
+    </property>
+    <property name="checkPath">
+      <value>/${spaces.company_home.childname}/${spaces.dictionary.childname}/cm:Lists</value>
+    </property>
+    <property name="bootstrapView">
+      <props>
+        <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}</prop>
+        <prop key="location">alfresco/module/${project.artifactId}/bootstrap/service-listmanager-lists-folder.xml</prop>
+        <prop key="messages">alfresco/module/${project.artifactId}/messages/service-listmanager-repo</prop>
+      </props>
+    </property>
+  </bean>
+</beans>
