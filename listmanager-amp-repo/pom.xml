@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.acando.alfresco</groupId>
+    <artifactId>listmanager-amp-repo</artifactId>
+    <version>1.5.5</version>
+    <name>listmanager-amp AMP project</name>
+    <packaging>jar</packaging>
+    <description>Manages the lifecycle of the listmanager-amp AMP (Alfresco Module Package)</description>
+
+    <properties>
+    	<!--  
+        <alfresco.groupId>org.alfresco</alfresco.groupId>
+        <alfresco.version>4.2.f</alfresco.version>
+        <app.log.root.level>WARN</app.log.root.level>
+        <alfresco.data.location>alf_data_dev</alfresco.data.location>
+        <alfresco.client.war>alfresco</alfresco.client.war>
+        <env>local</env>
+        -->
+        <alfresco.sdk.version>3.0.1</alfresco.sdk.version>
+	    <alfresco.platform.version>5.2.f</alfresco.platform.version><!-- use your alfresco version 4.2.f,5.2.f, ecc. -->
+	    <!-- To know which resource folder to filter for AMP extension projects -->
+		<app.amp.folder>src/main/amp</app.amp.folder>
+		<!-- To know which folder filtered AMP resources should end up in under /target -->
+		<app.amp.output.folder>${project.build.directory}/amp</app.amp.output.folder>
+		<!-- Turns on/off POM properties filtering globally. By default filtering is on.
+        This can be overridden in your POM, but do it at your own risk as it may break SDK functionalities -->
+        <app.filtering.enabled>true</app.filtering.enabled>
+	    
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <alfresco.groupId>org.alfresco</alfresco.groupId>
+       	<maven.alfresco.edition>community</maven.alfresco.edition>
+       	<maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
+    </properties>
+
+    <!-- Here we realize the connection with the Alfresco selected platform 
+        (e.g.version and edition) -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Setup what versions of the different Alfresco artifacts that will be used (depends on alfresco.version),
+                 so we don't have to specify version in any of the dependency definitions in our POM.
+                 For more info see:
+                    http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies
+            -->
+            <dependency>
+                <groupId>${alfresco.groupId}</groupId>
+                <artifactId>alfresco-platform-distribution</artifactId>
+                <version>${alfresco.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <!-- Following dependencies are needed for compiling Java code in src/main/java; 
+         <scope>provided</scope> is inherited for each of the following; 
+         for more info, please refer to alfresco-platform-distribution POM -->
+    <dependencies>
+        <dependency>
+            <groupId>${alfresco.groupId}</groupId>
+            <artifactId>alfresco-repository</artifactId>
+        </dependency>
+        <dependency>
+		    <groupId>org.alfresco</groupId>
+		    <artifactId>alfresco-remote-api</artifactId>  	 
+		</dependency>
+		<dependency>
+		    <groupId>org.alfresco.surf</groupId>
+		    <artifactId>spring-webscripts</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.alfresco.surf</groupId>
+		    <artifactId>spring-webscripts-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco-data-model</artifactId>
+		</dependency>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+  <build>
+	    <pluginManagement>
+		  	<plugins>
+			  	<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.6</version>
+					<executions>
+					    <execution>
+					        <id>build-amp-file</id>
+					        <phase>package</phase>
+					        <goals>
+					            <goal>single</goal>
+					        </goals>
+					        <configuration>
+					            <appendAssemblyId>false</appendAssemblyId>
+					            <descriptor>src/main/assembly/amp.xml</descriptor>
+					        </configuration>
+					    </execution>
+					</executions>
+					<configuration>
+					    <appendAssemblyId>false</appendAssemblyId>
+					    <descriptor>src/main/assembly/amp.xml</descriptor>
+					</configuration>
+					<dependencies>
+					    <dependency>
+					        <groupId>org.alfresco.maven.plugin</groupId>
+					        <artifactId>alfresco-maven-plugin</artifactId>
+					        <version>${alfresco.sdk.version}</version>
+					    </dependency>
+					</dependencies>
+			   </plugin>	
+		  	  <plugin>
+		          <groupId>org.alfresco.maven.plugin</groupId>
+		          <artifactId>alfresco-maven-plugin</artifactId>
+		          <version>${alfresco.sdk.version}</version>
+		          <executions>
+		              <execution>
+		                  <id>start-alfresco</id>
+		                  <goals>
+		                      <goal>it</goal>
+		                  </goals>
+		                  <phase>pre-integration-test</phase>
+		              </execution>
+		          </executions>
+		          <configuration>
+		              <!-- We need the flat file H2 database to run the Repo -->
+		              <enableH2>true</enableH2>
+		              <!-- This is a platform extension JAR, so we need the platform webapp (alfresco.war) -->
+		              <enablePlatform>true</enablePlatform>
+		              <!-- Enable Solr so we can use search, our Repo extension probably need search -->
+		              <enableSolr>true</enableSolr>
+		              <!-- We don't need the share.war if we don't have any UI extensions -->
+		              <enableShare>false</enableShare>
+		              <!-- Enable the REST API Explorer -->
+		              <enableApiExplorer>true</enableApiExplorer>
+		
+		              <!--
+		                 JARs and AMPs that should be overlayed/applied to the Platform/Repository WAR
+		                 (i.e. alfresco.war)
+		                 -->
+		              <platformModules>
+		                  <!-- This AMP is needed if we are going to access the platform webapp from a Share webapp -->
+		                  <!-- Share Services will be ignored if you are on Platform earlier than 5.1 -->
+		                  <moduleDependency>
+		                      <groupId>${alfresco.groupId}</groupId>
+		                      <artifactId>alfresco-share-services</artifactId>
+		                      <version>${alfresco.share.version}</version>
+		                      <type>amp</type>
+		                  </moduleDependency>
+		
+		                  <!-- Bring in this JAR project, need to be included here, otherwise resources from META-INF
+		                       will not be loaded, such as the test.html page
+		                  -->
+		                  <moduleDependency>
+		                      <groupId>${project.groupId}</groupId>
+		                      <artifactId>${project.artifactId}</artifactId>
+		                      <version>${project.version}</version>
+		                  </moduleDependency>
+		              </platformModules>
+		          </configuration>
+		      </plugin>
+		      <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-release-plugin</artifactId>
+		        <version>2.5.3</version>
+		        <configuration>
+		          <goals>deploy</goals>
+		          <tagNameFormat>@{project.version}</tagNameFormat>
+		        </configuration>
+		      </plugin>
+		      
+		      <plugin>
+		          <groupId>org.apache.maven.plugins</groupId>
+		          <artifactId>maven-resources-plugin</artifactId>
+		          <version>3.0.1</version>
+		          <configuration>
+		              <encoding>UTF-8</encoding>
+		              <nonFilteredFileExtensions> <!-- jpg, jpeg, gif, bmp and png are added automatically -->
+		                  <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>acp</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>doc</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>docx</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>xls</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>ppt</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>pptx</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>bin</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>lic</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>msg</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>css</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>psd</nonFilteredFileExtension>
+		                  <nonFilteredFileExtension>js</nonFilteredFileExtension>
+		              </nonFilteredFileExtensions>
+		          </configuration>
+		        </plugin>
+		        <!-- Compress JavaScript files and store as *-min.js -->
+		        <!-- 	          
+	            <plugin>
+	                <groupId>net.alchim31.maven</groupId>
+	                <artifactId>yuicompressor-maven-plugin</artifactId>
+	                <version>1.5.1</version>
+	                <executions>
+						<execution>
+							<goals>
+								<goal>compress</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<jswarn>false</jswarn>
+						<force>true</force>
+						<excludes>
+							<exclude>**/*.post.js</exclude>
+							<exclude>**/*.lib.js</exclude>
+							<exclude>**/*.get.js</exclude>
+							<exclude>**/*-min.js</exclude>
+							<exclude>**/WEB-INF/**</exclude>
+							<exclude>**/tiny_mce/**</exclude>
+							<exclude>**/yui/**</exclude>
+							<exclude>**/log4javascript*.js</exclude>
+						</excludes>
+					</configuration>
+	            </plugin>
+	            -->
+	            <!-- https://dzone.com/articles/accessing-artifact%E2%80%99s-maven-and -->
+				<plugin>
+	               <!-- Create the property $buildNumber holding the current Git revision -->
+	               <groupId>org.codehaus.mojo</groupId>
+	               <artifactId>buildnumber-maven-plugin</artifactId>
+	               <version>1.2</version>
+	               <executions>
+	                   <execution>
+	                       <phase>validate</phase>
+	                       <goals>
+	                           <goal>create</goal>
+	                       </goals>
+	                   </execution>
+	               </executions>
+	               <configuration>
+	                   <doCheck>false</doCheck>
+	                   <doUpdate>false</doUpdate>
+	               </configuration>
+	           </plugin>
+	          
+	           <plugin>
+	               <groupId>org.apache.maven.plugins</groupId>
+	               <artifactId>maven-jar-plugin</artifactId>
+	               <version>3.1.0</version>
+	               <configuration>
+	                   <archive>
+	                       <manifestEntries>
+	                           <Implementation-Title>${project.name}</Implementation-Title>                           
+	                           <Implementation-Version>${project.version} ${timestamp}</Implementation-Version>
+	                       </manifestEntries>
+	                   </archive>
+	               </configuration>
+	           </plugin> 
+				<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-source-plugin</artifactId>
+				  <version>3.0.1</version>
+				  <executions>
+				    <execution>
+				      <id>attach-sources</id>
+				      <goals>
+				        <goal>jar</goal>
+				      </goals>
+				    </execution>
+				  </executions>
+				</plugin>
+				<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-javadoc-plugin</artifactId>
+				  <version>3.1.0</version>
+				  <executions>
+				    <execution>
+				      <id>attach-javadocs</id>
+				      <goals>
+				        <goal>jar</goal>
+				      </goals>
+				    </execution>
+				  </executions>
+				</plugin> 
+		  	</plugins>
+	  	</pluginManagement>
+
+	    <!-- Overrinding Resources of parent pom -->
+		<resources>
+		     <!-- Filter the resource files in this project and do property substitutions -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering><!-- ${app.filtering.enabled} -->
+			</resource>
+			<resource>
+				<directory>${app.amp.folder}</directory>
+				<targetPath>${app.amp.output.folder}</targetPath>
+				<filtering>${app.filtering.enabled}</filtering>
+				<excludes>
+					<!-- Esclusione file autogenerati da Eclipse -->
+					<exclude>**/*.jsfdia</exclude>
+					<!-- Esclusione file che utilizzano marcatori simili a quelli usati da maven -->
+					<exclude>**/*.ftl</exclude>
+					<exclude>**/*.jasper</exclude>
+					<exclude>**/*.ks</exclude>
+					<exclude>**/*.ttf</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<!-- Inclusione delle risorse che utilizzano marcatori simili a quelli usati da maven mettendo il filtering a false, cosi' i tag non vengono rimpiazzati -->
+				<directory>${app.amp.folder}</directory>
+				<targetPath>${app.amp.output.folder}</targetPath>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.ftl</include>
+					<include>**/*.jasper</include>
+					<include>**/*.ks</include>
+					<include>**/*.ttf</include>
+				</includes>
+			</resource>
+		</resources>
+
+    </build>
+
+    <!-- This repository is only needed to retrieve Alfresco parent POM. 
+        NOTE: This can be removed when/if Alfresco will be on Maven Central -->
+    <repositories>
+        <repository>
+            <id>alfresco-public</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>alfresco-public-snapshots</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>

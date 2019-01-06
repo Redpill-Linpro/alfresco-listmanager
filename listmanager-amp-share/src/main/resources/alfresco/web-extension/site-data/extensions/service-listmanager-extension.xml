@@ -1,0 +1,20 @@
+<extension>
+    <modules>
+        <module>
+            <id>service-listmanager-extension</id>
+            <version>1.0</version>
+			<auto-deploy>true</auto-deploy>
+            <configurations>
+				<config evaluator="string-compare" condition="DocLibCustom">
+					<dependencies>	
+						<!--  			
+						<css src="/service-.css"/>
+						<js src="/service-.js" />
+						-->
+					</dependencies>
+				</config>
+            </configurations>
+
+        </module>
+    </modules>
+</extension>
